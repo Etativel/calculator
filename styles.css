@@ -6,7 +6,7 @@
     box-sizing: border-box;
     /* background-color: #B4CDE6; */
     background-color: #191717;
-
+    overflow-wrap: break-word;
 
 }
 
@@ -34,7 +34,7 @@ body{
     font-size: 24px;
     display: flex;
     flex-direction: column;
-    flex-shrink: 0;
+    /* flex-shrink: 0; */
     text-align: end;
     padding-top: 12px;
     padding-bottom: 12px;
@@ -44,12 +44,20 @@ body{
 }
 
 h1{
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: column;
     color: white;
+    flex-wrap: wrap;
     background-color: #202020;
 }
 
 p{
     color: white;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: flex-end;
     background-color: #202020;
 }
 
