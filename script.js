@@ -52,13 +52,58 @@ function operator(currentOperator, a, b){
             return power(firstNumber,secondNumber)
     }
 }
-
 function setNumber(element){
     if (errorOccur()) return;
     if (currentElement.textContent == "0" || needReset){
         resetDisplay()
     }
     currentElement.textContent += element
+}
+function setOperator(operator){
+    if (errorOccur()) return;
+    if (currentOperator !== "") calculate()
+    previousNum = currentElement.textContent
+    currentOperator = operator
+    previousElement.textContent = `${previousNum} ${currentOperator}`
+    needReset = true; 
+}
+function calculate(){
+    if (errorOccur()) return;
+    if (currentOperator === "" || needReset) return
+    currentNum = currentElement.textContent
+    if (currentNum === "0" && currentOperator == "÷"){
+        currentElement.textContent = "No zero division";
+        zeroDivisonStatus = true;
+    }else{
+        currentElement.textContent = operator(currentOperator, previousNum, currentNum)
+        previousElement.textContent = `${previousNum} ${currentOperator} ${currentNum} =`
+        currentOperator = ""
+    }
+}
+function addDot(){
+    if (errorOccur()) return;
+    if (currentElement.textContent.includes(".")) return
+    currentElement.textContent += "."
+}
+function convertOperator(operator){
+    if (operator == "*") return "×"
+    if (operator == "/") return "÷"
+    if (operator == "+") return "+"
+    if (operator == "-") return "-"
+    if (operator == "^") return "^"
+}
+function handleKeyDown(e){
+    if (e.key <= 9 && e.key >= 0) setNumber(e.key)
+    if (e.key == "Backspace") deleteElement()
+    if (e.key == "Delete") clearDevice()
+    if (e.key == ".") addDot()
+    if (e.key == "=" || e.key == "Enter") {
+        e.preventDefault()
+        calculate()
+    }
+    if (e.key == "*" || e.key == "/" || e.key == "+" || e.key == "-" || e.key == "^"){
+       setOperator(convertOperator(e.key))
+    }
 }
 function resetDisplay(){
     currentElement.textContent = ""
@@ -83,56 +128,6 @@ function deleteElement() {
         currentElement.textContent = "0";
     }
 }
-function addDot(){
-    if (errorOccur()) return;
-    if (currentElement.textContent.includes(".")) return
-    currentElement.textContent += "."
-}
-function calculate(){
-    if (errorOccur()) return;
-    if (currentOperator === "" || needReset) return
-    currentNum = currentElement.textContent
-    if (currentNum === "0" && currentOperator == "÷"){
-        currentElement.textContent = "No zero division";
-        zeroDivisonStatus = true;
-    }else{
-        currentElement.textContent = operator(currentOperator, previousNum, currentNum)
-        previousElement.textContent = `${previousNum} ${currentOperator} ${currentNum} =`
-        currentOperator = ""
-    }
-}
-
-function setOperator(operator){
-    if (errorOccur()) return;
-    if (currentOperator !== "") calculate()
-    previousNum = currentElement.textContent
-    currentOperator = operator
-    previousElement.textContent = `${previousNum} ${currentOperator}`
-    needReset = true; 
-}
-
-function convertOperator(operator){
-    if (operator == "*") return "×"
-    if (operator == "/") return "÷"
-    if (operator == "+") return "+"
-    if (operator == "-") return "-"
-    if (operator == "^") return "^"
-}
-
-function handleKeyDown(e){
-    if (e.key <= 9 && e.key >= 0) setNumber(e.key)
-    if (e.key == "Backspace") deleteElement()
-    if (e.key == "Delete") clearDevice()
-    if (e.key == ".") addDot()
-    if (e.key == "=" || e.key == "Enter") {
-        e.preventDefault()
-        calculate()
-    }
-    if (e.key == "*" || e.key == "/" || e.key == "+" || e.key == "-" || e.key == "^"){
-       setOperator(convertOperator(e.key))
-    }
-}
-
 numberButtons.forEach((button) => {
     button.addEventListener("click", ()=>{
         setNumber(button.textContent)
