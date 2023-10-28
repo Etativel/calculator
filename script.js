@@ -72,7 +72,7 @@ function calculate(){
     if (currentOperator === "" || needReset) return
     currentNum = currentElement.textContent
     if (currentNum === "0" && currentOperator == "÷"){
-        currentElement.textContent = "No zero divisor";
+        currentElement.textContent = "Zero divisor error";
         zeroDivisonStatus = true;
     }else{
         currentElement.textContent = operator(currentOperator, previousNum, currentNum)
