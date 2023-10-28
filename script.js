@@ -14,6 +14,12 @@ let currentOperator = "";
 let needReset = false;
 let zeroDivisonStatus = false;
 
+function errorOccur(){
+    if (zeroDivisonStatus || currentElement.textContent == "Infinity" || currentElement.textContent == "NaN" ){
+        return true
+    }
+    return false
+}
 
 function add(a,b){
     return a + b
@@ -48,8 +54,7 @@ function operator(currentOperator, a, b){
 }
 
 function setNumber(element){
-    if (zeroDivisonStatus) return;
-    if (currentElement.textContent == "Infinity") return;
+    if (errorOccur()) return;
     if (currentElement.textContent == "0" || needReset){
         resetDisplay()
     }
@@ -70,8 +75,7 @@ function clearDevice(){
     zeroDivisonStatus = false
 }
 function deleteElement() {
-    if (zeroDivisonStatus) return;
-    if (currentElement.textContent == "Infinity") return
+    if (errorOccur()) return;
     console.log(currentElement.textContent.length);
     if (currentElement.textContent.length > 1) {
         currentElement.textContent = currentElement.textContent.slice(0, -1);
@@ -80,14 +84,12 @@ function deleteElement() {
     }
 }
 function addDot(){
-    if (zeroDivisonStatus) return;
-    if (currentElement.textContent == "Infinity") return;
+    if (errorOccur()) return;
     if (currentElement.textContent.includes(".")) return
     currentElement.textContent += "."
 }
 function calculate(){
-    if (zeroDivisonStatus) return;
-    if (currentElement.textContent == "Infinity") return;
+    if (errorOccur()) return;
     if (currentOperator === "" || needReset) return
     currentNum = currentElement.textContent
     if (currentNum === "0" && currentOperator == "÷"){
@@ -99,12 +101,9 @@ function calculate(){
         currentOperator = ""
     }
 }
-function roundResult(result){
-    return Math.round(result * 1000) / 1000
-}
+
 function setOperator(operator){
-    if (zeroDivisonStatus) return;
-    if (currentElement.textContent == "Infinity") return;
+    if (errorOccur()) return;
     if (currentOperator !== "") calculate()
     previousNum = currentElement.textContent
     currentOperator = operator
