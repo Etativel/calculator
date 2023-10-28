@@ -115,7 +115,31 @@ operatorButtons.forEach((button) => {
         setOperator(button.textContent)
     })
 })
-equalButton.addEventListener("click", ()=>calculate())
-clearButton.addEventListener('click', ()=>clearDevice())
-deleteButton.addEventListener("click", ()=>deleteElement())
-dotButton.addEventListener("click", ()=>addDot())
+
+function convertOperator(operator){
+    if (operator == "*") return "×"
+    if (operator == "/") return "÷"
+    if (operator == "+") return "+"
+    if (operator == "-") return "-"
+    if (operator == "^") return "^"
+}
+
+function handleKeyDown(e){
+    if (e.key <= 9 && e.key >= 0) setNumber(e.key)
+    if (e.key == "Backspace") deleteElement()
+    if (e.key == "Delete") clearDevice()
+    if (e.key == ".") addDot()
+    if (e.key == "=" || e.key == "Enter") {
+        e.preventDefault()
+        calculate()
+    }
+    if (e.key == "*" || e.key == "/" || e.key == "+" || e.key == "-" || e.key == "^"){
+       setOperator(convertOperator(e.key))
+    }
+}
+
+equalButton.addEventListener("click", calculate)
+clearButton.addEventListener('click', clearDevice)
+deleteButton.addEventListener("click",deleteElement)
+dotButton.addEventListener("click", addDot)
+window.addEventListener("keydown", handleKeyDown)
