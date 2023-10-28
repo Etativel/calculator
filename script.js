@@ -76,6 +76,15 @@ function clearDevice(){
     needReset = false;
 }
 
+function deleteElement() {
+    console.log(currentElement.textContent.length);
+    if (currentElement.textContent.length > 1) {
+        currentElement.textContent = currentElement.textContent.slice(0, -1);
+    } else if (currentElement.textContent.length === 1) {
+        currentElement.textContent = "0";
+    }
+}
+
 function calculate(){
     if (currentOperator === "" || needReset) return
     currentNum = currentElement.textContent
@@ -113,3 +122,4 @@ clearButton.addEventListener('click', ()=>{
     clearDevice()
 })
 
+deleteButton.addEventListener("click",()=>deleteElement())
