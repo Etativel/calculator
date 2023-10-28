@@ -14,6 +14,7 @@ let currentOperator = "";
 let needReset = false;
 let zeroDivisonStatus = false;
 
+
 function add(a,b){
     return a + b
 }
@@ -47,6 +48,8 @@ function operator(currentOperator, a, b){
 }
 
 function setNumber(element){
+    if (zeroDivisonStatus) return;
+    if (currentElement.textContent == "Infinity") return;
     if (currentElement.textContent == "0" || needReset){
         resetDisplay()
     }
@@ -55,6 +58,7 @@ function setNumber(element){
 function resetDisplay(){
     currentElement.textContent = ""
     needReset = false
+    zeroDivisonStatus = false;
 }
 function clearDevice(){
     currentElement.textContent = "0"
@@ -63,6 +67,7 @@ function clearDevice(){
     currentNum = "";
     currentOperator = "";
     needReset = false;
+    zeroDivisonStatus = false
 }
 function deleteElement() {
     if (zeroDivisonStatus) return;
@@ -75,10 +80,14 @@ function deleteElement() {
     }
 }
 function addDot(){
+    if (zeroDivisonStatus) return;
+    if (currentElement.textContent == "Infinity") return;
     if (currentElement.textContent.includes(".")) return
     currentElement.textContent += "."
 }
 function calculate(){
+    if (zeroDivisonStatus) return;
+    if (currentElement.textContent == "Infinity") return;
     if (currentOperator === "" || needReset) return
     currentNum = currentElement.textContent
     if (currentNum === "0" && currentOperator == "÷"){
@@ -94,27 +103,14 @@ function roundResult(result){
     return Math.round(result * 1000) / 1000
 }
 function setOperator(operator){
+    if (zeroDivisonStatus) return;
+    if (currentElement.textContent == "Infinity") return;
     if (currentOperator !== "") calculate()
-    if (zeroDivisonStatus == true){
-        clearDevice()
-        zeroDivisonStatus = false;
-        return;
-    }
     previousNum = currentElement.textContent
     currentOperator = operator
     previousElement.textContent = `${previousNum} ${currentOperator}`
     needReset = true; 
 }
-numberButtons.forEach((button) => {
-    button.addEventListener("click", ()=>{
-        setNumber(button.textContent)
-    })
-})
-operatorButtons.forEach((button) => {
-    button.addEventListener("click", ()=>{
-        setOperator(button.textContent)
-    })
-})
 
 function convertOperator(operator){
     if (operator == "*") return "×"
@@ -137,6 +133,18 @@ function handleKeyDown(e){
        setOperator(convertOperator(e.key))
     }
 }
+
+numberButtons.forEach((button) => {
+    button.addEventListener("click", ()=>{
+        setNumber(button.textContent)
+    })
+})
+operatorButtons.forEach((button) => {
+    button.addEventListener("click", ()=>{
+        setOperator(button.textContent)
+    })
+})
+
 
 equalButton.addEventListener("click", calculate)
 clearButton.addEventListener('click', clearDevice)
