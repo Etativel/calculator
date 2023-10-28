@@ -1,10 +1,8 @@
 const previousElement = document.querySelector(".previous-element") 
 const currentElement = document.querySelector(".current-element")
-const clearButton = document.querySelector(".button-clear") 
-const posNeg = document.querySelector(".button-posneg") 
+const clearButton = document.querySelector(".button-clear")  
 const deleteButton = document.querySelector(".button-deletion") 
 const dotButton = document.querySelector(".button-dot") 
-// const percentageButton = document.querySelector(".button-percentage") 
 const equalButton = document.querySelector(".button-equal") 
 
 
@@ -17,6 +15,9 @@ let previousNum = "";
 let currentNum = "";
 let currentOperator = "";
 let needReset = false;
+let zeroDivisonStatus = false;
+
+let currentSign = ""
 
 function add(a,b){
     return a + b
@@ -77,6 +78,8 @@ function clearDevice(){
 }
 
 function deleteElement() {
+    if (zeroDivisonStatus) return;
+    if (currentElement.textContent == "Infinity") return
     console.log(currentElement.textContent.length);
     if (currentElement.textContent.length > 1) {
         currentElement.textContent = currentElement.textContent.slice(0, -1);
@@ -85,17 +88,37 @@ function deleteElement() {
     }
 }
 
+function addDot(){
+    if (currentElement.textContent.includes(".")) return
+    currentElement.textContent += "."
+}
+
 function calculate(){
     if (currentOperator === "" || needReset) return
     currentNum = currentElement.textContent
-    currentElement.textContent = operator(currentOperator, previousNum, currentNum)
-    previousElement.textContent = `${previousNum} ${currentOperator} ${currentNum} =`
-    currentOperator = ""
+    if (currentNum === "0" && currentOperator == "÷"){
+        currentElement.textContent = "No zero division";
+        zeroDivisonStatus = true;
+    }else{
+        currentElement.textContent = operator(currentOperator, previousNum, currentNum)
+        previousElement.textContent = `${previousNum} ${currentOperator} ${currentNum} =`
+        currentOperator = ""
+    }
 
+
+}
+
+function roundResult(result){
+    return Math.round(result * 1000) / 1000
 }
 
 function setOperator(operator){
     if (currentOperator !== "") calculate()
+    if (zeroDivisonStatus == true){
+        clearDevice()
+        zeroDivisonStatus = false;
+        return;
+    }
     previousNum = currentElement.textContent
     currentOperator = operator
     previousElement.textContent = `${previousNum} ${currentOperator}`
@@ -113,13 +136,8 @@ operatorButtons.forEach((button) => {
         setOperator(button.textContent)
     })
 })
-
-equalButton.addEventListener("click", ()=>{
-    calculate()
-})
-
-clearButton.addEventListener('click', ()=>{
-    clearDevice()
-})
-
-deleteButton.addEventListener("click",()=>deleteElement())
+equalButton.addEventListener("click", ()=>calculate())
+clearButton.addEventListener('click', ()=>clearDevice())
+deleteButton.addEventListener("click", ()=>deleteElement())
+// dotButton.addEventListener("click", ()=>addDot())
+dotButton.addEventListener("click", ()=>addDot())
