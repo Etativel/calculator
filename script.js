@@ -6,7 +6,7 @@ const dotButton = document.querySelector(".button-dot")
 const equalButton = document.querySelector(".button-equal") 
 const operatorButtons = document.querySelectorAll(".button-operator")
 const numberButtons = document.querySelectorAll(".button-number")
-
+const signButton = document.querySelector(".button-posneg")
 
 let previousNum = "";
 let currentNum = "";
@@ -85,6 +85,10 @@ function addDot(){
     if (currentElement.textContent.includes(".")) return
     currentElement.textContent += "."
 }
+function addSign(){
+    if (errorOccur()) return;
+    currentElement.textContent = String(Number(currentElement.textContent) * -1)
+}
 function convertOperator(operator){
     if (operator == "*") return "×"
     if (operator == "/") return "÷"
@@ -119,20 +123,9 @@ function clearDevice(){
     needReset = false;
     zeroDivisonStatus = false
 }
-// function deleteElement() {
-//     if (errorOccur()) return;
-//     console.log(currentElement.textContent.length);
-//     if (currentElement.textContent.length > 1) {
-//         currentElement.textContent = currentElement.textContent.slice(0, -1);
-//     } else if (currentElement.textContent.length === 1) {
-//         currentElement.textContent = "0";
-//     }
-// }
-
 function deleteElement() {
     if (errorOccur()) return;
     console.log(currentElement.textContent.length);
-
     if (currentElement.textContent === "-" || (currentElement.textContent.length === 2 && currentElement.textContent.startsWith("-"))) {
         currentElement.textContent = "0";
     } else if (currentElement.textContent.length > 1) {
@@ -141,7 +134,6 @@ function deleteElement() {
         currentElement.textContent = "0";
     }
 }
-
 
 numberButtons.forEach((button) => {
     button.addEventListener("click", ()=>{
@@ -154,9 +146,9 @@ operatorButtons.forEach((button) => {
     })
 })
 
-
 equalButton.addEventListener("click", calculate)
 clearButton.addEventListener('click', clearDevice)
 deleteButton.addEventListener("click",deleteElement)
 dotButton.addEventListener("click", addDot)
+signButton.addEventListener("click", addSign)
 window.addEventListener("keydown", handleKeyDown)
