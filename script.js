@@ -119,15 +119,30 @@ function clearDevice(){
     needReset = false;
     zeroDivisonStatus = false
 }
+// function deleteElement() {
+//     if (errorOccur()) return;
+//     console.log(currentElement.textContent.length);
+//     if (currentElement.textContent.length > 1) {
+//         currentElement.textContent = currentElement.textContent.slice(0, -1);
+//     } else if (currentElement.textContent.length === 1) {
+//         currentElement.textContent = "0";
+//     }
+// }
+
 function deleteElement() {
     if (errorOccur()) return;
     console.log(currentElement.textContent.length);
-    if (currentElement.textContent.length > 1) {
+
+    if (currentElement.textContent === "-" || (currentElement.textContent.length === 2 && currentElement.textContent.startsWith("-"))) {
+        currentElement.textContent = "0";
+    } else if (currentElement.textContent.length > 1) {
         currentElement.textContent = currentElement.textContent.slice(0, -1);
     } else if (currentElement.textContent.length === 1) {
         currentElement.textContent = "0";
     }
 }
+
+
 numberButtons.forEach((button) => {
     button.addEventListener("click", ()=>{
         setNumber(button.textContent)
